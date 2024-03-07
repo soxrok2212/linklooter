@@ -1,13 +1,13 @@
 PREFIX ?= /usr/local
-BINDIR = $(PREFIX)/bin
-MANDIR = $(PREFIX)/share/man
-SRCDIR = src
-HDRS = $(SRCDIR)/version.h
+BINDIR := $(PREFIX)/bin
+MANDIR := $(PREFIX)/share/man
+SRCDIR := src
+HDRS := $(SRCDIR)/version.h $(SRCDIR)/includes/
 
-TARGET = linklooter
-SOURCE = $(SRCDIR)/$(TARGET).c
-SOURCES = $(SRCDIR)/dhcp
-LIBS = 
+TARGET := linklooter
+SOURCE := $(SRCDIR)/$(TARGET).c
+LIBS := 
+LDFLAGS :=
 
 .PHONY: all install install-man clean
 
@@ -15,8 +15,8 @@ all: $(TARGET)
 
 install: install-bin install-man
 
-$(TARGET): $(SRCDIR) $(HDRS) $(SOURCES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE) $(LIBS) $(LDFLAGS)
+$(TARGET): $(SRCDIR) $(HDRS)
+	$(CC) $(CFLAGS) $(SOURCE) -o $(TARGET) $(LIBS) $(LDFLAGS)
 
 install-bin: $(TARGET)
 	install -d $(DESTDIR)$(BINDIR)

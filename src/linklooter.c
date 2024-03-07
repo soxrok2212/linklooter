@@ -26,8 +26,9 @@
 
 #include <getopt.h>
 
-#include "dhcp/dhcp.c"
+#include "dhcp.c"
 #include "version.h"
+#include "includes/linklooter.h"
 
 static const char *option_string = "a:hv";
 static const struct option long_options[] = {
@@ -53,31 +54,35 @@ void usage() {
 			"	-v, --version		: Display version\n"
 			"\n", LONG_VERSION
 	      );
+	exit(0);
+}
+
+int process_args() {
+	send_dhcp_discover();
+	return 0;
 }
 
 int main(int argc, char *argv[]) {
+	if (argc < 2)
+		usage();
 	int opt = 0;
 	int long_index = 0;
 	opt = getopt_long(argc, argv, option_string, long_options, &long_index);
-	if (argc < 2)
-		usage();
-		exit(1);
+	char *attack_mode;
 	while (opt != -1) {
 		switch (opt) {
 			case 'a':
-				if (!strcmp(optarg, "dhcp-release"))
-					printf("Hello\n");
+					attack_mode = optarg;
 				break;
 			case 'h':
 				usage();
-				exit(0);
 				break;
 			default:
 				usage();
-				exit(0);
 				break;
 		}
 		opt = getopt_long(argc, argv, option_string, long_options, &long_index);
 	}
+	process_args();
 	return 0;
 }
